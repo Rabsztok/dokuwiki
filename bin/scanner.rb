@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby
+#!/usr/bin/env jruby
 
 class Scanner
   
@@ -114,6 +114,9 @@ class Scanner
           text_buffer += tag_scan
         when '>'
           text_buffer += "<blockquote>#{ blockquote_scan }</blockquote>"
+        when '^', '|'
+          text_buffer += "<table>" if 
+          text_buffer += "<tr>#{ table_scan(opened) }</tr></table>"
         else
           text_buffer += @char.to_s
         end
@@ -122,6 +125,10 @@ class Scanner
       end
     end
     return text_buffer
+  end
+  
+  def table_scan(opened = nil)
+    
   end
   
   def tag_scan(searched_tag = nil)
@@ -139,14 +146,14 @@ class Scanner
             return true
           else
             @text.pos = position
-            return false
+            return text_buffer
           end
         when :nowiki
           if (index == 1)
             return true
           else
             @text.pos = position
-            return false
+            return text_buffer
           end
         end
         
